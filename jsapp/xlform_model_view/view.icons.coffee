@@ -6,15 +6,15 @@ define 'cs!xlform/view.icons', [
 
   iconDetails = [
     # row 1
-      label: "Select One"
-      faClass: "dot-circle-o"
-      grouping: "r1"
-      id: "select_one"
+      label: "GPS"
+      faClass: "map-marker"
+      grouping: "r3"
+      id: "geopoint"
     ,
-      label: "Select Many"
-      faClass: "list-ul"
-      grouping: "r1"
-      id: "select_multiple"
+      label: "Photo"
+      faClass: "picture-o"
+      grouping: "r3"
+      id: "image"
     ,
       label: "Text"
       faClass: "lato-text"
@@ -50,15 +50,15 @@ define 'cs!xlform/view.icons', [
     ,
 
     # r3
-      label: "GPS"
-      faClass: "map-marker"
-      grouping: "r3"
-      id: "geopoint"
+      label: "Select One"
+      faClass: "dot-circle-o"
+      grouping: "r1"
+      id: "select_one"
     ,
-      label: "Photo"
-      faClass: "picture-o"
-      grouping: "r3"
-      id: "image"
+      label: "Select Many"
+      faClass: "list-ul"
+      grouping: "r1"
+      id: "select_multiple"
     ,
       label: "Audio"
       faClass: "volume-up"
