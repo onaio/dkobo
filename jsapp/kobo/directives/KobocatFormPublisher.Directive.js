@@ -15,7 +15,7 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                     $('button.save-button').removeClass('save-button--deploying');
                     scope.close();
                     $miscUtils.alert('Survey Publishing succeeded');
-                    $routeTo.external(results.published_form_url);
+                    // $routeTo.external(results.published_form_url);
                 }
                 function fail (response) {
                     $('button.save-button .ui-button-text').html('Deploy and View New Project');
@@ -26,7 +26,14 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
 
                 var id = scope.form_name ? dkobo_xlform.model.utils.sluggifyLabel(scope.form_name) : '';
                 $api.surveys
-                    .publish({id: scope.item.id, title:scope.form_label, id_string: id}).then(success, fail);
+                    .publish({id: scope.item.id,
+                              title:scope.form_label,
+                              id_string: id,
+                              description: scope.form_description,
+                              shared: scope.form_shared,
+                              tags: scope.form_tags
+                            })
+                    .then(success, fail);
             };
 
             scope.form_label = scope.item.name;
