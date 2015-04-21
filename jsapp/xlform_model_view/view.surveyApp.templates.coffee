@@ -100,8 +100,9 @@ define 'cs!xlform/view.surveyApp.templates', [], ()->
           <ul class="-form-editor survey-editor__list">
             <li class="survey-editor__null-top-row empty">
               <p class="survey-editor__message well">
-                <b>This form is currently empty.</b><br>
-                You can add questions, notes, prompts, or other fields by clicking on the "+" sign below.
+                <b id="message-title">No questions yet!</b><br>
+                <b>This survey is empty. You can start writing by clicking the "+" button below.</b><br>
+                <b id="hint">Hint: don't forget to include a GPS to view data on a map!</b>
               </p>
               <div class="survey__row__spacer  expanding-spacer-between-rows expanding-spacer-between-rows--depr">
                 <div class="btn btn--block btn--addrow js-expand-row-selector   add-row-btn add-row-btn--depr">
