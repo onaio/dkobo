@@ -18,6 +18,12 @@
         <input type="radio" class="forms__kobocat__publisher__input" ng-model="form_shared" value="False"> Private
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
+        categories:
+        <select ng-model="form_categories" 
+                class="form-categories" 
+                ng-init="form_categories = scope.defaultSelectVal"></select>
+    </label>
+    <label for="form-description" class="forms__kobocat__publisher__label">
         Tags<br/>
         <input placeholder="Examples: graffiti, tobacco, water..." class="forms__kobocat__publisher__input" id="form-tags" ng-model="form_tags" />
     </label>
