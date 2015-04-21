@@ -6,7 +6,6 @@
     background: #FFF;
     color: $wellTextColor;
     font-weight: 600;
-    font-style: italic;
     font-size: 13px;
     a {
         font-style: normal;
@@ -132,6 +131,13 @@ code input[type="text"] {
 }
 
 .survey-editor__message {
-    text-align: center;
     color: #888;
+    #hint {
+        color: #000;
+        font-weight: bold;
+    }
+    #message-title {
+        font-size: 23px;
+        color: #428bca;
+    }
 }

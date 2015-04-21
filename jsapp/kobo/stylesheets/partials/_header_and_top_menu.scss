@@ -61,11 +61,14 @@
     border-bottom: 1px solid #E3E8EC;
     padding: 5px 4px;
     position: fixed;
-    top: 40px;
+    bottom: 0px;
     left: 0;
     z-index: 6;
     background-color: #FFF;
     transition: width 150ms, left 150ms;
+    #question-library {
+        display: none;
+    }
 }
 
 // in smaller screen sizes, reduce width of buttons to be able to fit

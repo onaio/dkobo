@@ -72,12 +72,13 @@ $nested-btn--addrow-height: 24px;
     }
 
     .fa {
-        background-color: $addButtonColor;
+        background-color: #428bca;
         display: block;
         width: 24px;
         height: $btn--addrow-height;
         line-height: $btn--addrow-height;
         border-radius: $buttonBorderRadius;
+        margin-left: -44px;
     }
 
     // when debugging, it's helpful to mock :hover
