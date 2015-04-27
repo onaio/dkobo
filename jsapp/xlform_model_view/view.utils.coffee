@@ -162,6 +162,26 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
           return unescape(document.cookie.substring(c_start, c_end))
       ''
 
+    urlBase64Decode = (str) ->
+      output = str.replace(/-/g, '+').replace(/_/g, '/')
+      remainder = output.length % 4
+      if remainder == 2
+        output += '=='
+      else if remainder == 3
+        output += '='
+      else if remainder != 0
+        throw 'Illegal base64url string!'
+      decodeURIComponent escape(window.atob(output))
+
+    decodeToken = (token) ->
+      parts = token.split('.')
+      if parts.length != 3
+        throw new Error('JWT must have 3 parts')
+      decoded = urlBase64Decode(parts[1])
+      if !decoded
+        throw new Error('Cannot decode the token')
+      JSON.parse decoded
+
     launch.fromCsv = (surveyCsv, options={})->
       holder = $("<div>", class: "enketo-holder").html("<div class='enketo-iframe-icon'></div><div class=\"enketo-loading-message\"><p><i class=\"fa fa-spin fa-spinner\"></i><br/>Loading Preview</p><p>This will take a few seconds depending on the size of your form.</p></div>")
       wrap = $("<div>", class: "js-click-remove-iframe iframe-bg-shade")
@@ -187,7 +207,10 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
         data: "body": surveyCsv
         beforeSend: (xhr)=>
           csrftoken = getCookie('csrftoken')
-          xhr.setRequestHeader 'Authorization', 'Token ebed2d499b40d07555c479db14b3f965d85c83d1'
+          myw_kobo_user_cookie = getCookie('myw_kobo_user')
+          jwt_payload = decodeToken(myw_kobo_user_cookie)
+          auth_token = jwt_payload.token
+          xhr.setRequestHeader 'Authorization', 'Token ' + auth_token
           xhr.setRequestHeader 'X-CSRFToken', csrftoken
         complete: (jqhr, status)=>
           response = jqhr.responseJSON
