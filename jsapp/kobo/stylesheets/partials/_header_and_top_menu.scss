@@ -16,6 +16,7 @@
         margin-top: 0;
         margin-right: 10px;
         margin-bottom: 0;
+        margin-left: 15px;
         display: inline-block;
         font-size: 14px;
         font-family: 'Open Sans';
@@ -23,6 +24,7 @@
         .header-bar__title-text { color: white; }
     }
     .header-bar__support {
+      display: none;
       margin-right: 30px;
       color: white;
       &:hover {
@@ -46,6 +48,7 @@
         height: 27px;
         margin-top: 5px;
         margin-right: 6px;
+        display: none;
     }
 
 }
@@ -67,6 +70,9 @@
     background-color: #FFF;
     transition: width 150ms, left 150ms;
     #question-library {
+        display: none;
+    }
+    #group-questions {
         display: none;
     }
 }
