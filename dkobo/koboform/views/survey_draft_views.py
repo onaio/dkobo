@@ -7,6 +7,7 @@ from guardian.shortcuts import assign_perm
 from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -76,7 +77,7 @@ def survey_draft_detail(request, pk, format=None):
                                    algorithms=['HS256'])
         email = token_payload.get('email')
     if not request.user.is_superuser:
-        kwargs['email'] = email
+        kwargs['user__email'] = email
 
     try:
         survey_draft = SurveyDraft.objects.get(**kwargs)
@@ -126,6 +127,21 @@ def import_survey_draft(request):
     Imports an XLS or CSV file into the user's SurveyDraft list.
     Returns an error in JSON if the survey was not valid.
     """
+    myw_kobo_user_cookie = request.COOKIES.get('myw_kobo_user')
+    email = ''
+    if not myw_kobo_user_cookie:
+        return HttpResponse('Json Web Token NOT set.')
+
+    token_payload = jwt.decode(myw_kobo_user_cookie,
+                               settings.JWT_SECRET_KEY,
+                               algorithms=['HS256'])
+    email = token_payload.get('email')
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return HttpResponse('User does not exist.')
+
     output = {}
     posted_file = request.FILES.get(u'files')
     response_code = 200
@@ -140,7 +156,7 @@ def import_survey_draft(request):
             new_survey_draft = SurveyDraft.objects.create(**{
                 u'body': _csv,
                 u'name': posted_file.name,
-                u'user': request.user
+                u'user': user
             })
             output[u'survey_draft_id'] = new_survey_draft.id
         except Exception, err:
@@ -164,7 +180,7 @@ def import_survey_draft(request):
             new_survey_draft = SurveyDraft.objects.create(**{
                 u'body': _csv,
                 u'name': posted_file.name,
-                u'user': request.user
+                u'user': user
             })
             output[u'survey_draft_id'] = new_survey_draft.id
         except Exception, err:
