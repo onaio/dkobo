@@ -37,7 +37,7 @@ function FormsController ($scope, $rootScope, $resource, $miscUtils, $api) {
         '-emptyformlist');
 
     $rootScope.canAddNew = true;
-    $rootScope.activeTab = '';
+    $rootScope.activeTab = 'Forms';
     $rootScope.icon_link = 'forms';
 
     $scope.deleteSurvey = function (survey) {
