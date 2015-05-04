@@ -17,6 +17,7 @@ from django.conf import settings
 from models import SurveyDraft, SurveyPreview
 from taggit.models import Tag
 from dkobo.koboform import pyxform_utils
+from dkobo.koboform.utils import get_email_and_token
 
 
 class SurveyAssetViewset(viewsets.ModelViewSet):
@@ -25,13 +26,7 @@ class SurveyAssetViewset(viewsets.ModelViewSet):
     exclude_asset_type = False
 
     def get_queryset(self):
-        myw_kobo_user_cookie = self.request.COOKIES.get('myw_kobo_user')
-        email = ''
-        if myw_kobo_user_cookie:
-            token_payload = jwt.decode(myw_kobo_user_cookie,
-                                       settings.JWT_SECRET_KEY,
-                                       algorithms=['HS256'])
-            email = token_payload.get('email')
+        email, token = get_email_and_token(self.request)
         queryset = SurveyDraft.objects.filter(user__email=email)
         if self.exclude_asset_type:
             queryset = queryset.exclude(asset_type=None)
@@ -45,14 +40,7 @@ class SurveyAssetViewset(viewsets.ModelViewSet):
         if 'tags' in contents:
             del contents['tags']
 
-        myw_kobo_user_cookie = self.request.COOKIES.get('myw_kobo_user')
-        email = ''
-        if myw_kobo_user_cookie:
-            myw_kobo_user = jwt.decode(myw_kobo_user_cookie,
-                                       settings.JWT_SECRET_KEY,
-                                       algorithms=['HS256'])
-            email = myw_kobo_user.get('email')
-
+        email, token = get_email_and_token(request)
         try:
             contents['user'] = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -67,13 +55,7 @@ class SurveyAssetViewset(viewsets.ModelViewSet):
         return Response(ListSurveyDraftSerializer(survey_draft).data)
 
     def retrieve(self, request, pk=None):
-        myw_kobo_user_cookie = self.request.COOKIES.get('myw_kobo_user')
-        email = ''
-        if myw_kobo_user_cookie:
-            myw_kobo_user = jwt.decode(myw_kobo_user_cookie,
-                                       settings.JWT_SECRET_KEY,
-                                       algorithms=['HS256'])
-            email = myw_kobo_user.get('email')
+        email, token = get_email_and_token(request)
         queryset = SurveyDraft.objects.filter(user__email=email)
         survey_draft = get_object_or_404(queryset, pk=pk)
         return Response(DetailSurveyDraftSerializer(survey_draft).data)
@@ -88,12 +70,9 @@ class SurveyAssetViewset(viewsets.ModelViewSet):
         token = request.QUERY_PARAMS.get('token')
         username = request.QUERY_PARAMS.get('username')
         if email and token and username:
-            try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
-                user = User(username=username, password=username)
-                user.email = email
-                user.save()
+            if User.objects.filter(username=username).count() < 1:
+                User.objects.create(
+                    username=username, password=username, email=email)
 
             payload = {
                 'email': email,
@@ -101,7 +80,8 @@ class SurveyAssetViewset(viewsets.ModelViewSet):
             }
 
             encoded = jwt.encode(
-                payload, settings.JWT_SECRET_KEY, algorithm='HS256')
+                payload, settings.JWT_SECRET_KEY,
+                algorithm=settings.JWT_ALGORITHM)
             return Response({'jwt': encoded})
 
         return super(SurveyAssetViewset, self).list(request, *args, **kwargs)
