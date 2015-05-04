@@ -42,6 +42,9 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                 $.getJSON( "/static/kobo/categories.json", function( data ) {
                   var options = '';
                   $.each( data, function( key, val ) {
+                    if (key === 0) {
+                        scope.defaultSelectVal = {"id": val.id, "name": val.name}
+                    }
                     options += "<option value='" + val.id + ((key === 0) ? "' selected='selected'>" : "'>") + val.name + "</option>" ;
                   });
                   $( ".form-categories" ).empty().append(options)
@@ -50,8 +53,6 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
 
             scope.open = function () {
                 scope.categories()
-                scope.defaultSelectVal = {"id": "category:Animal_Rights",
-                                         "name": "Animal Rights"}
                 scope.show_publisher = true;
                 dialog.dialog('open');
             };
