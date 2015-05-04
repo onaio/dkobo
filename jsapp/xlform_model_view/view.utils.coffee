@@ -207,8 +207,8 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
         data: "body": surveyCsv
         beforeSend: (xhr)=>
           csrftoken = getCookie('csrftoken')
-          myw_kobo_user_cookie = getCookie('myw_kobo_user')
-          jwt_payload = decodeToken(myw_kobo_user_cookie)
+          ona_user_cookie = getCookie('ona_user')
+          jwt_payload = decodeToken(ona_user_cookie)
           auth_token = jwt_payload.token
           xhr.setRequestHeader 'Authorization', 'Token ' + auth_token
           xhr.setRequestHeader 'X-CSRFToken', csrftoken
@@ -217,7 +217,7 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
           if status is "success" and response and response.unique_string
             unique_string = response.unique_string
             # NB: 'unique_string' is survey draft file name on ona
-            launch("https://ona.io/api/v1/forms/survey_preview.xml?filename=#{unique_string}")
+            launch("#{previewServer}/api/v1/forms/survey_preview.xml?filename=#{unique_string}")
             options.onSuccess()  if options.onSuccess?
           else if status isnt "success"
             wrap.remove()
