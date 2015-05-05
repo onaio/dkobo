@@ -23,7 +23,6 @@ class SurveyDraft(models.Model):
     summary = JSONField()
     asset_type = models.CharField(max_length=32, null=True)
     tags = TaggableManager()
-    email = models.EmailField(max_length=255, null=False, default='')
 
 
     @property
