@@ -15,6 +15,7 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                     $('button.save-button').removeClass('save-button--deploying');
                     scope.close();
                     $miscUtils.alert('Survey Publishing succeeded');
+                    // commented the line below to prevent redirecting after survey draft has been published
                     // $routeTo.external(results.published_form_url);
                 }
                 function fail (response) {
