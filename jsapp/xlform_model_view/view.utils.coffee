@@ -216,8 +216,9 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
           response = jqhr.responseJSON
           if status is "success" and response and response.unique_string
             unique_string = response.unique_string
+            username = response.username
             # NB: 'unique_string' is survey draft file name on ona
-            launch("#{previewServer}/api/v1/forms/survey_preview.xml?filename=#{unique_string}")
+            launch("#{previewServer}/api/v1/forms/survey_preview.xml?filename=#{unique_string}&username=#{username}")
             options.onSuccess()  if options.onSuccess?
           else if status isnt "success"
             wrap.remove()
