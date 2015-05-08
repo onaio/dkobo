@@ -4,20 +4,13 @@
 
 .header-bar {
     width: 100%;
-    height: 40px;
-    position: fixed;
     top: 0;
     left: 0;
     z-index: 6;
     line-height: 40px;
-    background-color: #3F3F3F;
     transition: width 150ms, left 150ms;
+    background:#3F3F3F;
     .header-bar__title, .header-bar__support {
-        margin-top: 0;
-        margin-right: 10px;
-        margin-bottom: 0;
-        margin-left: 15px;
-        display: inline-block;
         font-size: 14px;
         font-family: 'Open Sans';
         font-weight: 600;
@@ -30,6 +23,19 @@
       &:hover {
         color: #1e8fde;
       }
+    }
+    h1.header-bar__title{
+        margin:0;
+    }
+    span.header-bar__title-text{
+        background: #3F3F3F;;
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding-left: 25px;
+    }
+    .header-bar__title-text:empty{
+        display:none;
     }
 
     .btn {
@@ -51,6 +57,9 @@
         display: none;
     }
 
+}
+.main>section.content{
+    padding-top:0!important;
 }
 
 
