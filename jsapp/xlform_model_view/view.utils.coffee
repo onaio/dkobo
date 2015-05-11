@@ -128,7 +128,8 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
     enketoServer = "https://enketo.org"
     enketoPreviewUri = "/webform/preview"
     buildUrl = (previewUrl)->
-      """#{enketoServer}#{enketoPreviewUri}?form=#{previewUrl}"""
+      encodedPreviewUrl = encodeURIComponent(previewUrl)
+      """#{enketoServer}#{enketoPreviewUri}?form=#{encodedPreviewUrl}"""
 
     _loadConfigs = (options)->
       if options.enketoPreviewUri
