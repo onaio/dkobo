@@ -71,16 +71,16 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
 
             dialog.dialog({
                 modal: true,
-                height: 325,
+                height: 575,
                 width: 580,
                 autoOpen: false,
-                title: 'Deploy form as new survey project',
+                title: 'Deploy survey draft as new map',
                 draggable: false,
                 resizable: false,
-                position: { my: "center", at: "center", of: ".main" },
+                position: { my: "top", at: "top"},
                 buttons: [
                     {
-                        text: "Deploy and View New Project",
+                        text: "Deploy and View New Map",
                         "class": 'save-button',
                         click: scope.publish
                     },
