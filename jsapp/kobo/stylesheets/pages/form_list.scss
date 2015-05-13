@@ -223,17 +223,40 @@
     margin-bottom: 15px;
 }
 
+.forms__kobocat__publisher__label textarea {
+    border: 2px solid #dadada;
+    margin-top:5px;
+    width: 100%;
+    border-radius: 5px;
+}
+
 .forms__kobocat__publisher__label input {
-    border: medium none;
+    border: 2px solid #dadada;
+    border-radius: 5px;
     color: #666;
     font-style: italic;
     margin: 5px 0 0;
-    padding: 4px 0;
+    padding: 4px 6px;
     width: 100%;
     &:focus {
       color: #333;
       font-style: normal;
     }
+}
+
+.forms__kobocat__publisher__label select {
+    margin-top:5px;
+    border: 2px solid #dadada;
+    width: 100%;
+}
+
+.forms__kobocat__publisher__label input[type=radio] {
+    margin: 5px 5px 0 0;
+    width: auto;
+}
+
+.field-contents label {
+  margin-right:8px;
 }
 
 .forms__card__buttons {
@@ -362,5 +385,9 @@
 
 .filters__filter {
     margin-right: 10px;
+}
+
+.ui-dialog div.ui-dialog-titlebar {
+    padding-top: 18px;
 }
 
