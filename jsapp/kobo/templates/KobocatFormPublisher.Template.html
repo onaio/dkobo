@@ -1,33 +1,33 @@
 <div class="forms__kobocat__btn forms__kobocat__btn--publish" ng-click="open()" >Deploy survey draft as new map <i class="fa fa-external-link-square"></i></div>
 <div class="forms__kobocat__publisher" ng-show="show_publisher">
     <label for="form-label" class="forms__kobocat__publisher__label">
-        Title<br/>
+        Title*<br/>
         <input placeholder="{{ item.name }}" class="forms__kobocat__publisher__input" id="form-label" ng-model="form_label" />
     </label>
     <label for="form-name" class="forms__kobocat__publisher__label">
-        Confirm the unique id of your map<br/>
+        Confirm the unique id of your map*<br/>
         <input placeholder="{{ get_form_id(item) }}" class="forms__kobocat__publisher__input" id="form-name" ng-model="form_name" />
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
-        Project question<br/>
-        <input placeholder="{{ item.name }}" class="forms__kobocat__publisher__input" id="form-description" ng-model="form_description" />
+        Project question*<br/>
+        <textarea placeholder="Examples: Can we get clean drinking water? or Can we increase polio vaccination rates?" class="forms__kobocat__publisher__input" id="form-description" ng-model="form_description"></textarea>
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
-        Should the survey results be public?<br/>
+        Should the survey results be public?*<br/>
         <div class="field-contents">
             <label for="public"><input type="radio" class="forms__kobocat__publisher__input" ng-model="form_shared" value="True">Public</label>
             <label for="private"><input type="radio" class="forms__kobocat__publisher__input" ng-model="form_shared" value="False">Private</label>
         </div>
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
-        Category:
+        Category*<br/>
         <select ng-model="form_categories" 
                 class="form-categories" 
                 ng-init="form_categories = scope.defaultSelectVal"></select>
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
-        Tags<br/>
-        <input placeholder="Examples: graffiti, tobacco, water...(separate tags with commas)" class="forms__kobocat__publisher__input" id="form-tags" ng-model="form_tags" />
+        Tags*<br/>
+        <textarea placeholder="Examples: graffiti, tobacco, water...(separate tags with commas)" class="forms__kobocat__publisher__input" id="form-tags" ng-model="form_tags"></textarea>
     </label>
     <span class="error-message" ng-show="show_form_name_exists_message">{{ error_message }}</span>
 </div>
