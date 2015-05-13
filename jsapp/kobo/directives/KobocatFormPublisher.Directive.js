@@ -6,36 +6,54 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
         templateUrl: staticFilesUri + 'templates/KobocatFormPublisher.Template.html',
         link: function (scope, element, attributes) {
             var dialog = element.find('.forms__kobocat__publisher');
+            scope.validate = function(input_fields) {
+                for (i = 0; i < input_fields.length; i++) {
+                    if (typeof input_fields[i] === "undefined") {
+                        return false;
+                    }
+                }
+                return true;
+            };
             scope.publish = function () {
-                var spinner = '<i class="fa fa-spin fa-spinner"></i> Deploying Project';
+                var spinner = '<i class="fa fa-spin fa-spinner"></i> Deploying Map';
                 $('button.save-button .ui-button-text').html(spinner);
                 $('button.save-button').addClass('save-button--deploying');
+                var id = scope.form_name ? dkobo_xlform.model.utils.sluggifyLabel(scope.form_name) : '';
+                var form_categories = scope.form_categories || "category:Animal_Rights" ;
+                var input_fields = [scope.form_label, id, scope.form_description, form_categories, scope.form_shared, scope.form_tags];
+
                 function success (results, headers) {
-                    $('button.save-button .ui-button-text').html('Deploy and View New Project');
+                    $('button.save-button .ui-button-text').html('Deploy and View New Map');
                     $('button.save-button').removeClass('save-button--deploying');
                     scope.close();
-                    $miscUtils.alert('Survey Publishing succeeded');
-                    // commented the line below to prevent redirecting after survey draft has been published
-                    // $routeTo.external(results.published_form_url);
+                    $miscUtils.alert('Survey publishing succeeded. Redirection to maps page in progress.');
+                    window.top.location.href = "http://myw.ona.io/#/dashboard/maps"
                 }
                 function fail (response) {
-                    $('button.save-button .ui-button-text').html('Deploy and View New Project');
+                    $('button.save-button .ui-button-text').html('Deploy and View New Map');
                     $('button.save-button').removeClass('save-button--deploying');
                     scope.show_form_name_exists_message = true;
                     scope.error_message = 'Survey Publishing failed: ' + (response.data.text || response.data.error || response.data.detail);
                 }
 
-                var id = scope.form_name ? dkobo_xlform.model.utils.sluggifyLabel(scope.form_name) : '';
-                $api.surveys
-                    .publish({id: scope.item.id,
-                              title:scope.form_label,
-                              id_string: id,
-                              description: scope.form_description,
-                              categories: scope.form_categories,
-                              shared: scope.form_shared,
-                              tags: scope.form_tags
-                            })
-                    .then(success, fail);
+                if (scope.validate(input_fields)) {
+                    scope.show_form_name_exists_message = false;
+                    $api.surveys
+                        .publish({id: scope.item.id,
+                                  title: scope.form_label,
+                                  id_string: id,
+                                  description: scope.form_description,
+                                  categories: form_categories,
+                                  shared: scope.form_shared,
+                                  tags: scope.form_tags
+                                })
+                        .then(success, fail);
+                } else {
+                    $('button.save-button .ui-button-text').html('Deploy and View New Map');
+                    $('button.save-button').removeClass('save-button--deploying');
+                    scope.show_form_name_exists_message = true;
+                    scope.error_message = 'Survey Publishing failed: All fields are required';
+                }
             };
 
             scope.form_label = scope.item.name;
@@ -58,6 +76,7 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                 dialog.dialog('open');
             };
             scope.close = function () {
+                scope.show_form_name_exists_message = false;
                 scope.show_publisher = false;
                 dialog.dialog('close');
             };
