@@ -106,6 +106,7 @@ define 'cs!xlform/view.surveyApp.templates', [], ()->
                 <b id="hint">Include a “GPS” question to view data on a map.</b><br>
                 <b id="hint">Only “Select One” questions will produce pie charts/bar graphs.</b><br>
                 <b id="hint">Include “Photo” questions to tell a powerful story.</b><br>
+                <b id="hint">You can re-order the questions by dragging and dropping them</b><br>
               </p>
               <div class="survey__row__spacer  expanding-spacer-between-rows expanding-spacer-between-rows--depr">
                 <div class="btn btn--block btn--addrow js-expand-row-selector   add-row-btn add-row-btn--depr">
