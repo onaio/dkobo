@@ -7,10 +7,12 @@
     <label for="form-name" class="forms__kobocat__publisher__label">
         Confirm the unique id of your map*<br/>
         <input placeholder="{{ get_form_id(item) }}" class="forms__kobocat__publisher__input" id="form-name" ng-model="form_name" />
+        <p class="examples">For each map deploy, this MUST be unique.</p>
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
         Project question*<br/>
-        <textarea placeholder="Examples: Can we get clean drinking water? or Can we increase polio vaccination rates?" class="forms__kobocat__publisher__input" id="form-description" ng-model="form_description"></textarea>
+        <textarea class="forms__kobocat__publisher__input" id="form-description" ng-model="form_description"></textarea>
+        <p class="examples">Examples: Can we get clean drinking water? or Can we increase polio vaccination rates?</p>
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
         Should the survey results be public?*<br/>
@@ -27,7 +29,8 @@
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
         Tags*<br/>
-        <textarea placeholder="Examples: graffiti, tobacco, water...(separate tags with commas)" class="forms__kobocat__publisher__input" id="form-tags" ng-model="form_tags"></textarea>
+        <textarea class="forms__kobocat__publisher__input" id="form-tags" ng-model="form_tags"></textarea>
+        <p class="examples">Examples: graffiti, tobacco, water...(separate tags with commas)</p>
     </label>
     <span class="error-message" ng-show="show_form_name_exists_message">{{ error_message }}</span>
 </div>
