@@ -36,7 +36,7 @@ kobo.service('$miscUtils', ['$rootScope', '$userDetails', function ($rootScope, 
                 $rootScope.isLoading = true;
                 $rootScope.add_form = 'Uploading Form';
                 $rootScope.$apply();
-                log(data.files[0].name + " is uploading...");
+                console.log(data.files[0].name + " is uploading...");
                 data.submit().success(_successFn)
                 .error(function (result) {
                     $rootScope.isLoading = false;
