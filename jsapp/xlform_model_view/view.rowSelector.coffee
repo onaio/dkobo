@@ -114,9 +114,9 @@ define 'cs!xlform/view.rowSelector', [
       if rowType is 'calculate'
         rowDetails.calculation = value
       else if rowType is 'image'
-        rowDetails.calculation = value
+        rowDetails.label = "Point and shoot! Use the camera to take a photo"
       else if rowType is 'geopoint'
-        rowDetails.calculation = value
+        rowDetails.label = "Record your current location"
       else
         rowDetails.label = value
 
