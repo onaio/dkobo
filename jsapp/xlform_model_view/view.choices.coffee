@@ -88,12 +88,12 @@ define 'cs!xlform/view.choices', [
       @t = $("<i class=\"fa fa-trash-o js-remove-option\">")
       @pw = $("<div class=\"editable-wrapper js-cancel-select-row\">")
       @p = $("<span class=\"js-cancel-select-row\">")
-      @c = $("<code><label>Value:</label> <span class=\"js-cancel-select-row\">AUTOMATIC</span></code>")
+      # @c = $("<code><label>Value:</label> <span class=\"js-cancel-select-row\">AUTOMATIC</span></code>")
       @d = $('<div>')
       if @model
         @p.html @model.get("label") || 'Empty'
         @$el.attr("data-option-id", @model.cid)
-        $('span', @c).html @model.get("name")
+        # $('span', @c).html @model.get("name")
         @model.set('setManually', true)
       else
         @model = new $choices.Option()
@@ -101,7 +101,7 @@ define 'cs!xlform/view.choices', [
         @p.html("Option #{1+@options.i}").addClass("preliminary")
 
       $viewUtils.makeEditable @, @model, @p, edit_callback: _.bind @saveValue, @
-      @n = $('span', @c)
+      # @n = $('span', @c)
       $viewUtils.makeEditable @, @model, @n, edit_callback: (val) =>
         other_names = @options.cl.getNames()
         if @model.get('name')? && val.toLowerCase() == @model.get('name').toLowerCase()
@@ -133,7 +133,7 @@ define 'cs!xlform/view.choices', [
 
       @d.append(@pw)
       @d.append(@t)
-      @d.append(@c)
+      # @d.append(@c)
       @$el.html(@d)
       @
     keyupinput: (evt)->
