@@ -52,22 +52,22 @@ define 'cs!xlform/view.icons', [
     # r3
       label: "Select One"
       faClass: "dot-circle-o"
-      grouping: "r1"
+      grouping: "r3"
       id: "select_one"
     ,
       label: "Select Many"
       faClass: "list-ul"
-      grouping: "r1"
+      grouping: "r3"
       id: "select_multiple"
     ,
       label: "Audio"
       faClass: "volume-up"
-      grouping: "r3"
+      grouping: "r1"
       id: "audio"
     ,
       label: "Video"
       faClass: "video-camera"
-      grouping: "r3"
+      grouping: "r1"
       id: "video"
     ,
 
