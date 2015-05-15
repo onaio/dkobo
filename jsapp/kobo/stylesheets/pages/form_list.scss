@@ -391,10 +391,23 @@
     padding-top: 18px;
 }
 
+/* ==========================================================================
+   Examples on the deploy modal
+   ========================================================================== */
 .examples {
   margin-top: 1px;
   font-size: 11px;
   color: #aaa;
   font-style: italic;
+}
+
+/* ==========================================================================
+   For the tags field
+   ========================================================================== */
+div.tagsinput {
+  border: 2px solid #dadada;
+  margin-top: 5px;
+  width: 100%;
+  border-radius: 5px;
 }
 
