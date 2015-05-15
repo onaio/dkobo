@@ -29,7 +29,7 @@
     </label>
     <label for="form-description" class="forms__kobocat__publisher__label">
         Tags*<br/>
-        <textarea class="forms__kobocat__publisher__input" id="form-tags" ng-model="form_tags"></textarea>
+        <input class="forms__kobocat__publisher__input form-tags-class" name="tags" id="form-tags" ng-model="form_tags"/>
         <p class="examples">Examples: graffiti, tobacco, water...(separate tags with commas)</p>
     </label>
     <span class="error-message" ng-show="show_form_name_exists_message">{{ error_message }}</span>
