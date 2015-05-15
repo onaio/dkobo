@@ -20,7 +20,8 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                 $('button.save-button').addClass('save-button--deploying');
                 var id = scope.form_name ? dkobo_xlform.model.utils.sluggifyLabel(scope.form_name) : '';
                 var form_categories = scope.form_categories || "category:Animal_Rights" ;
-                var input_fields = [scope.form_label, id, scope.form_description, form_categories, scope.form_shared, scope.form_tags];
+                var form_tags = $('.form-tags-class').val();
+                var input_fields = [scope.form_label, id, scope.form_description, form_categories, scope.form_shared, form_tags];
 
                 function success (results, headers) {
                     $('button.save-button .ui-button-text').html('Deploy and View New Map');
@@ -45,7 +46,7 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                                   description: scope.form_description,
                                   categories: form_categories,
                                   shared: scope.form_shared,
-                                  tags: scope.form_tags
+                                  tags: form_tags
                                 })
                         .then(success, fail);
                 } else {
@@ -90,7 +91,7 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
 
             dialog.dialog({
                 modal: true,
-                height: 620,
+                height: 630,
                 width: 580,
                 autoOpen: false,
                 title: 'Deploy survey draft as new map',
@@ -113,6 +114,23 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                     $('.ui-widget-overlay').bind('click',function(){
                         dialog.dialog('close');
                     });
+
+                    $(this).find('.form-tags-class').tagsInput({
+                       'height':'66px',
+                       'width':'100%'
+                    });
+                    /*
+                    clears pre-existing tags on the tags input object so that
+                    they don't appear on dialog load.
+                    */
+                    $('.tagsinput .tag').remove()
+                },
+                close: function() {
+                    /*
+                    removes the tags' container created when dialog is opened;
+                    prevents creation of duplicate container tags.
+                    */
+                    $(this).find('.tagsinput').remove()
                 }
 
             });
