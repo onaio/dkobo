@@ -27,7 +27,7 @@ define 'cs!xlform/view.rowSelector.templates', [], ()->
       <div class="row__questiontypes row__questiontypes--namer">
         <form class="row__questiontypes__form" action="javascript:void(0);" >
           <input type="text" class="js-cancel-sort" />
-          <button style="font-size: 12px;"> + Add Question </button>
+          <button style="font-size: 12px;"> + Question Type</button>
         </form>
       </div>
     """
