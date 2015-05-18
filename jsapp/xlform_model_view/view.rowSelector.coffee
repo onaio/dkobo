@@ -3,11 +3,13 @@ define 'cs!xlform/view.rowSelector', [
         'cs!xlform/view.pluggedIn.backboneView',
         'cs!xlform/view.templates',
         'cs!xlform/view.icons',
+        'cs!xlform/model.configs',
         ], (
             Backbone,
             $baseView,
             $viewTemplates,
             $icons,
+            $modelConfigs,
             )->
 
   viewRowSelector = {}
@@ -110,15 +112,14 @@ define 'cs!xlform/view.rowSelector', [
 
       rowDetails =
         type: rowType
+        label: value
 
-      if rowType is 'calculate'
-        rowDetails.calculation = value
-      else if rowType is 'image'
-        rowDetails.label = "Point and shoot! Use the camera to take a photo"
-      else if rowType is 'geopoint'
-        rowDetails.label = "Record your current location"
-      else
-        rowDetails.label = value
+      if [
+          'select_one'
+          'select_multiple'
+          'calculate'
+        ].indexOf(rowType) > -1
+        rowDetails.label = $modelConfigs.defaultsForType[rowType]['label']
 
       options = {}
       if (rowBefore = @options.spawnedFromView?.model)
