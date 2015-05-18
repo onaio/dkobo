@@ -112,14 +112,16 @@ define 'cs!xlform/view.rowSelector', [
 
       rowDetails =
         type: rowType
-        label: value
 
       if [
           'select_one'
           'select_multiple'
           'calculate'
-        ].indexOf(rowType) > -1
+        ].indexOf(rowType) < 0
         rowDetails.label = $modelConfigs.defaultsForType[rowType]['label']
+      else
+        rowDetails.label = value
+
 
       options = {}
       if (rowBefore = @options.spawnedFromView?.model)
