@@ -7,12 +7,9 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
         link: function (scope, element, attributes) {
             var dialog = element.find('.forms__kobocat__publisher');
             scope.validate = function(input_fields) {
-                for (i = 0; i < input_fields.length; i++) {
-                    if (typeof input_fields[i] === "undefined") {
-                        return false;
-                    }
-                }
-                return true;
+                return input_fields.every(function(element, index, array) {
+                    return element !== undefined;
+                });
             };
             scope.publish = function () {
                 var spinner = '<i class="fa fa-spin fa-spinner"></i> Deploying Map';
@@ -27,7 +24,9 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                     $('button.save-button .ui-button-text').html('Deploy and View New Map');
                     $('button.save-button').removeClass('save-button--deploying');
                     scope.close();
-                    $miscUtils.alert('Survey publishing succeeded. Redirection to maps page in progress.');
+                    var success_message = 'Success! Your survey has been published. Redirection to maps page in progress.' +
+                                          'Use ODK Collect to download survey and collect data in the field.'
+                    $miscUtils.alert(success_message);
                     window.top.location.href = "http://myw.ona.io/#/dashboard/maps"
                 }
                 function fail (response) {
