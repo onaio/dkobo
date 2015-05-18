@@ -102,37 +102,40 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
   configs.defaultsForType =
     geopoint:
       label:
-        value: "Record your current location"
+        value: "Record your GPS coordinates."
       required:
         value: false
         _hideUnlessChanged: true
     image:
       label:
-        value: "Point and shoot! Use the camera to take a photo"
+        value: "Point and shoot! Use the camera to take a photo."
+    text:
+      label:
+        value: "Write a question that requires a text response."
     video:
       label:
-        value: "Use the camera to record a video"
+        value: "Use the camera to record a video."
     audio:
       label:
-        value: "Use the camera's microphone to record a sound"
+        value: "Use the recorder to record audio."
     note:
       label:
-        value: "This note can be read out loud"
+        value: "Write a prompt that will help you conduct the survey."
       required:
         value: false
         _hideUnlessChanged: true
     integer:
       label:
-        value: "Enter a number"
+        value: "Write a question that requires a number response."
     barcode:
       label:
-        value: "Use the camera to scan a barcode"
+        value: "Scan a barcode."
     decimal:
       label:
-        value: "Enter a number"
+        value: "Write a question that requires a number with decimals."
     date:
       label:
-        value: "Enter a date"
+        value: "Write a question that requires a date response."
     calculate:
       calculation:
         value: ""
@@ -143,13 +146,13 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
         _hideUnlessChanged: true
     datetime:
       label:
-        value: "Enter a date and time"
+        value: "Write a question that requires a date and time response."
     time:
       label:
-        value: "Enter a time"
+        value: "Write a question that requires a time response."
     acknowledge:
       label:
-        value: "Acknowledge"
+        value: "Do you acknowledge that your responses to the survey and any associated photos will be published online at www.mapyourworld.org?"
 
   configs.columns = ["type", "name", "label", "hint", "required", "relevant", "default", "constraint"]
 
