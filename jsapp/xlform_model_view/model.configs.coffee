@@ -109,15 +109,27 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
     image:
       label:
         value: "Point and shoot! Use the camera to take a photo."
+      required:
+        value: false
+        _hideUnlessChanged: true
     text:
       label:
         value: "Write a question that requires a text response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     video:
       label:
         value: "Use the camera to record a video."
+      required:
+        value: false
+        _hideUnlessChanged: true
     audio:
       label:
         value: "Use the recorder to record audio."
+      required:
+        value: false
+        _hideUnlessChanged: true
     note:
       label:
         value: "Write a prompt that will help you conduct the survey."
@@ -127,15 +139,27 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
     integer:
       label:
         value: "Write a question that requires a number response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     barcode:
       label:
         value: "Scan a barcode."
+      required:
+        value: false
+        _hideUnlessChanged: true
     decimal:
       label:
         value: "Write a question that requires a number with decimals."
+      required:
+        value: false
+        _hideUnlessChanged: true
     date:
       label:
         value: "Write a question that requires a date response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     calculate:
       calculation:
         value: ""
@@ -147,12 +171,29 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
     datetime:
       label:
         value: "Write a question that requires a date and time response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     time:
       label:
         value: "Write a question that requires a time response."
+      required:
+        value: false
+        _hideUnlessChanged: true
+    select_one:
+      required:
+        value: false
+        _hideUnlessChanged: true
+    select_multiple:
+      required:
+        value: false
+        _hideUnlessChanged: true
     acknowledge:
       label:
         value: "Do you acknowledge that your responses to the survey and any associated photos will be published online at www.mapyourworld.org?"
+      required:
+        value: false
+        _hideUnlessChanged: true
 
   configs.columns = ["type", "name", "label", "hint", "required", "relevant", "default", "constraint"]
 
