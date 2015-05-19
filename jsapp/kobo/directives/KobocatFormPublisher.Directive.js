@@ -90,7 +90,7 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
 
             dialog.dialog({
                 modal: true,
-                height: 630,
+                height: 660,
                 width: 580,
                 autoOpen: false,
                 title: 'Deploy survey draft as new map',
