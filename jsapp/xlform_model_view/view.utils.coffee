@@ -225,6 +225,8 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
             wrap.remove()
             holder.remove()
             informative_message = jqhr.responseText or jqhr.statusText
+            escaped_informative_message = JSON.parse(informative_message.replace(/'/g, "\'"))
+            informative_message = escaped_informative_message.detail
             if informative_message.split("\n").length > 0
               informative_message = informative_message.split("\n")[0..2].join("<br>")
             onError informative_message, title: 'Error launching preview'
