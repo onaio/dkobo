@@ -97,17 +97,19 @@ define 'cs!xlform/view.surveyApp.templates', [], ()->
         </header>
         #{warnings_html}
         <div class="survey-editor form-editor-wrap container">
+          <p class="survey-editor__message well">
+            <b id="message-title">Instructions</b><br>
+            <b>Title your survey by clicking on “Untitled survey” at the top of the page.</b><br>
+            <b>Start writing survey questions by clicking the “+” button below.</b><br>
+            <b>Click "Save & Exit Draft" at the bottom of the page when finished.</b><br><br>
+            <b id="hint">Hints:</b><br>
+            <b id="hint">Include a “GPS” question to view data on a map.</b><br>
+            <b id="hint">Only “Select One” questions will produce pie charts/bar graphs.</b><br>
+            <b id="hint">Include “Photo” questions to tell a powerful story.</b><br>
+            <b id="hint">Re-order questions by dragging and dropping</b><br>
+          </p>
           <ul class="-form-editor survey-editor__list">
             <li class="survey-editor__null-top-row empty">
-              <p class="survey-editor__message well">
-                <b id="message-title">No questions yet!</b><br>
-                <b>This survey is empty. You can start writing survey questions by clicking the "+" button below.</b><br>
-                <b id="hint">Hints:</b><br>
-                <b id="hint">Include a “GPS” question to view data on a map.</b><br>
-                <b id="hint">Only “Select One” questions will produce pie charts/bar graphs.</b><br>
-                <b id="hint">Include “Photo” questions to tell a powerful story.</b><br>
-                <b id="hint">Re-order questions by dragging and dropping</b><br>
-              </p>
               <div class="survey__row__spacer  expanding-spacer-between-rows expanding-spacer-between-rows--depr">
                 <div class="btn btn--block btn--addrow js-expand-row-selector   add-row-btn add-row-btn--depr">
                   <i class="fa fa-plus"></i>

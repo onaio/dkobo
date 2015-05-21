@@ -102,13 +102,13 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
   configs.defaultsForType =
     geopoint:
       label:
-        value: "Record your GPS coordinates."
+        value: "Record GPS coordinates."
       required:
         value: false
         _hideUnlessChanged: true
     image:
       label:
-        value: "Point and shoot! Use the camera to take a photo."
+        value: "Write a prompt to take a photo."
       required:
         value: false
         _hideUnlessChanged: true
@@ -120,13 +120,13 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
         _hideUnlessChanged: true
     video:
       label:
-        value: "Use the camera to record a video."
+        value: "Write a prompt to record a video."
       required:
         value: false
         _hideUnlessChanged: true
     audio:
       label:
-        value: "Use the recorder to record audio."
+        value: "Write a prompt to record audio."
       required:
         value: false
         _hideUnlessChanged: true
@@ -144,7 +144,7 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
         _hideUnlessChanged: true
     barcode:
       label:
-        value: "Scan a barcode."
+        value: "Write a prompt to scan a barcode."
       required:
         value: false
         _hideUnlessChanged: true
