@@ -27,7 +27,7 @@ kobo.directive ('kobocatFormPublisher', ['$api', '$miscUtils', '$routeTo', funct
                     var success_message = 'Success! Your survey has been published. Redirection to maps page in progress. ' +
                                           'Use ODK Collect to download survey and collect data in the field.'
                     $miscUtils.alert(success_message);
-                    window.top.location.href = "http://myw.ona.io/#/dashboard/maps"
+                    window.top.location.href = "/#/dashboard/maps"
                 }
                 function fail (response) {
                     $('button.save-button .ui-button-text').html('Deploy and View New Map');
