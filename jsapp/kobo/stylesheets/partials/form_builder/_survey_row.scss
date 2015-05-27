@@ -17,6 +17,10 @@
 
     .btn--addrow {
         display: none;
+        position: absolute;
+        left: -40px;
+        top: -42px;
+        padding: 30px 0 0 11px;
     }
     &:hover { 
         > .survey__row__spacer > .btn--addrow {
@@ -72,12 +76,13 @@ $nested-btn--addrow-height: 24px;
     }
 
     .fa {
-        background-color: $addButtonColor;
+        background-color: #428bca;
         display: block;
         width: 24px;
         height: $btn--addrow-height;
         line-height: $btn--addrow-height;
         border-radius: $buttonBorderRadius;
+        margin-left: 0px;
     }
 
     // when debugging, it's helpful to mock :hover

@@ -1,3 +1,4 @@
+import jwt
 import json
 import requests
 import pyxform.survey_from
@@ -6,14 +7,17 @@ from guardian.shortcuts import assign_perm
 from django.http import HttpResponseBadRequest, HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ParseError
 
 from dkobo.koboform.models import SurveyDraft
 from dkobo.koboform.serializers import ListSurveyDraftSerializer, DetailSurveyDraftSerializer
 from dkobo.koboform import pyxform_utils, kobocat_integration, xlform
+from dkobo.koboform.utils import get_email_and_token
 
 def export_form(request, id):
     survey_draft = SurveyDraft.objects.get(pk=id)
@@ -49,7 +53,6 @@ def export_form(request, id):
 #     response['Content-Disposition'] = 'attachment; filename=all_questions.xls'
 #     return response
 
-@login_required
 def create_survey_draft(request):
 
     raw_draft = json.loads(request.body)
@@ -64,12 +67,12 @@ def create_survey_draft(request):
 
     return HttpResponse(json.dumps(model_to_dict(survey_draft)))
 
-@login_required
 @api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
 def survey_draft_detail(request, pk, format=None):
     kwargs = {'pk': pk}
+    email, token = get_email_and_token(request)
     if not request.user.is_superuser:
-        kwargs['user'] = request.user
+        kwargs['user__email'] = email
 
     try:
         survey_draft = SurveyDraft.objects.get(**kwargs)
@@ -109,18 +112,26 @@ XLS_CONTENT_TYPES = [
     "application/octet-stream",
 ]
 
-@login_required
+
 def bulk_delete_questions(request):
     question_ids = json.loads(request.body)
-    SurveyDraft.objects.filter(user=request.user).filter(id__in=question_ids).delete()
+    SurveyDraft.objects.filter(
+        user=request.user).filter(id__in=question_ids).delete()
     return HttpResponse('')
 
-@login_required
+
 def import_survey_draft(request):
     """
     Imports an XLS or CSV file into the user's SurveyDraft list.
     Returns an error in JSON if the survey was not valid.
     """
+    email, token = get_email_and_token(request)
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return HttpResponse('User does not exist.')
+
     output = {}
     posted_file = request.FILES.get(u'files')
     response_code = 200
@@ -130,12 +141,14 @@ def import_survey_draft(request):
     elif posted_file.name.endswith('.xml'):
         warnings = []
         try:
-            survey_object = pyxform.survey_from.xform(filelike_obj=posted_file, warnings=warnings)
-            _csv = survey_object.to_csv(warnings=warnings, koboform=True).read()
+            survey_object = pyxform.survey_from.xform(
+                filelike_obj=posted_file, warnings=warnings)
+            _csv = survey_object.to_csv(
+                warnings=warnings, koboform=True).read()
             new_survey_draft = SurveyDraft.objects.create(**{
                 u'body': _csv,
                 u'name': posted_file.name,
-                u'user': request.user
+                u'user': user
             })
             output[u'survey_draft_id'] = new_survey_draft.id
         except Exception, err:
@@ -159,7 +172,7 @@ def import_survey_draft(request):
             new_survey_draft = SurveyDraft.objects.create(**{
                 u'body': _csv,
                 u'name': posted_file.name,
-                u'user': request.user
+                u'user': user
             })
             output[u'survey_draft_id'] = new_survey_draft.id
         except Exception, err:
@@ -168,7 +181,6 @@ def import_survey_draft(request):
     return HttpResponse(json.dumps(output), content_type="application/json", status=response_code)
 
 
-@login_required
 def import_questions(request):
     """
     Imports an XLS or CSV file into the user's SurveyDraft list.
@@ -205,27 +217,115 @@ def import_questions(request):
         output[u'error'] = "No file posted"
     return HttpResponse(json.dumps(output), content_type="application/json", status=response_code)
 
-@login_required
+
+def update_xform(formid, public, description, headers):
+    url = kobocat_integration._kobocat_url(
+            '/api/v1/forms/%s' % formid, internal=True)
+    payload = {
+        'public': public,
+        'description': description,
+    }
+
+    response = requests.patch(url, headers=headers, data=payload)
+    if response.status_code in [200, 201]:
+        return {u'message': 'Successfully updated xform'}
+
+    return {'status_code': response.status_code, 'detail': response.text}
+
+
+def create_tags(formid, tags, headers):
+    url = kobocat_integration._kobocat_url(
+                '/api/v1/forms/%s/labels' % formid, internal=True)
+    payload = {
+        'tags': tags
+    }
+    response = requests.post(url, headers=headers, data=payload)
+
+    if response.status_code in [200, 201]:
+        return {u'message': 'Successfully created tags'}
+
+    return {'status_code': response.status_code, 'detail': response.text}
+
+
+def get_tags(request):
+    tags = request.DATA.get('categories', 'category:Animal_Rights')
+    if request.DATA.get('tags'):
+        tags = "%s, %s" % (tags, request.DATA.get('tags'))
+
+    return tags
+
+
+def update_survey_draft_and_form(
+        resp, survey_draft, username, public, description, tags, headers,
+        status_code):
+    formid = resp[u'formid']
+    status_code = status_code
+    survey_draft.kobocat_published_form_id = formid
+    survey_draft.save()
+    resp.update({
+        u'message': 'Successfully published form',
+        u'published_form_url': kobocat_integration._kobocat_url(
+            '/%s/forms/%s' % (username,
+                              resp.get('id_string')))
+    })
+
+    update_xform_result = update_xform(
+            formid, public, description, headers)
+    create_tags_result = create_tags(formid, tags, headers)
+    if update_xform_result.get('detail'):
+        resp = update_xform_result.get('detail')
+        status_code = update_xform_result.get('status_code')
+    if create_tags_result.get('detail'):
+        resp = create_tags_result.get('detail')
+        status_code = create_tags_result.get('status_code')
+
+    return Response(resp, status=status_code)
+
+
+def get_survey_draft(pk, email):
+    try:
+        survey_draft = SurveyDraft.objects.get(pk=pk, user__email=email)
+    except SurveyDraft.DoesNotExist:
+        return Response({'error': 'SurveyDraft not found'},
+                        status=status.HTTP_404_NOT_FOUND)
+    return survey_draft
+
+
+def get_user(email):
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'},
+                        status=status.HTTP_404_NOT_FOUND)
+    return user
+
+
 @api_view(['GET', 'POST'])
 def publish_survey_draft(request, pk, format=None):
     if not kobocat_integration._is_enabled():
-        return Response({'error': 'KoBoCat Server not specified'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        return Response({'error': 'KoBoCat Server not specified'},
+                        status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
-    try:
-        survey_draft = SurveyDraft.objects.get(pk=pk, user=request.user)
-    except SurveyDraft.DoesNotExist:
-        return Response({'error': 'SurveyDraft not found'}, status=status.HTTP_404_NOT_FOUND)
+    email, token = get_email_and_token(request)
+    if not token:
+        raise ParseError('Credentials for publishing not provided')
+
+    survey_draft = get_survey_draft(pk, email)
+    user = get_user(email)
 
     form_id_string = request.DATA.get('id_string', False)
-    survey_draft._set_form_id_string(form_id_string, title=request.DATA.get('title', False))
+    description = request.DATA.get('description', form_id_string)
+    public = request.DATA.get('shared', "False")
+    tags = get_tags(request)
 
-    _set_necessary_permissions(request.user)
-    (token, is_new) = Token.objects.get_or_create(user=request.user)
-    headers = {u'Authorization':'Token ' + token.key}
+    survey_draft._set_form_id_string(
+        form_id_string, title=request.DATA.get('title', False))
 
+    headers = {u'Authorization': 'Token %s' % token}
     payload = {u'text_xls_form': survey_draft.body}
     try:
-        url = kobocat_integration._kobocat_url('/api/v1/forms', internal=True)
+        url = kobocat_integration._kobocat_url(
+            '/api/v1/forms', internal=True)
         response = requests.post(url, headers=headers, data=payload)
         status_code = response.status_code
         resp = response.json()
@@ -234,15 +334,12 @@ def publish_survey_draft(request, pk, format=None):
         status_code = 504
 
     if 'formid' in resp:
-        survey_draft.kobocat_published_form_id = resp[u'formid']
-        survey_draft.save()
-        serializer = DetailSurveyDraftSerializer(survey_draft)
-        resp.update({
-            u'message': 'Successfully published form',
-            u'published_form_url': kobocat_integration._kobocat_url('/%s/forms/%s' % (request.user.username, resp.get('id_string')))
-            })
+        return update_survey_draft_and_form(
+            resp, survey_draft, user.username, public, description, tags,
+            headers, status_code)
 
     return Response(resp, status=status_code)
+
 
 def _set_necessary_permissions(user):
     """
@@ -256,6 +353,7 @@ def _set_necessary_permissions(user):
         for perm in perms:
             assign_perm('%s.%s' % (app, perm), user)
 
+
 def published_survey_draft_url(request, pk):
     try:
         survey_draft = SurveyDraft.objects.get(pk=pk, user=request.user)
@@ -264,5 +362,6 @@ def published_survey_draft_url(request, pk):
 
     username = survey_draft.user.name
 
-    return HttpResponseRedirect(kobocat_integration._kobocat_url("/%s" % username))
+    return HttpResponseRedirect(
+        kobocat_integration._kobocat_url("/%s" % username))
 

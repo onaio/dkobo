@@ -102,37 +102,64 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
   configs.defaultsForType =
     geopoint:
       label:
-        value: "Record your current location"
+        value: "Record GPS coordinates."
       required:
         value: false
         _hideUnlessChanged: true
     image:
       label:
-        value: "Point and shoot! Use the camera to take a photo"
+        value: "Write a prompt to take a photo."
+      required:
+        value: false
+        _hideUnlessChanged: true
+    text:
+      label:
+        value: "Write a question that requires a text response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     video:
       label:
-        value: "Use the camera to record a video"
+        value: "Write a prompt to record a video."
+      required:
+        value: false
+        _hideUnlessChanged: true
     audio:
       label:
-        value: "Use the camera's microphone to record a sound"
+        value: "Write a prompt to record audio."
+      required:
+        value: false
+        _hideUnlessChanged: true
     note:
       label:
-        value: "This note can be read out loud"
+        value: "Write a prompt that will help you conduct the survey."
       required:
         value: false
         _hideUnlessChanged: true
     integer:
       label:
-        value: "Enter a number"
+        value: "Write a question that requires a number response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     barcode:
       label:
-        value: "Use the camera to scan a barcode"
+        value: "Write a prompt to scan a barcode."
+      required:
+        value: false
+        _hideUnlessChanged: true
     decimal:
       label:
-        value: "Enter a number"
+        value: "Write a question that requires a number with decimals."
+      required:
+        value: false
+        _hideUnlessChanged: true
     date:
       label:
-        value: "Enter a date"
+        value: "Write a question that requires a date response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     calculate:
       calculation:
         value: ""
@@ -143,13 +170,30 @@ define 'cs!xlform/model.configs', ["underscore", 'cs!xlform/model.utils', "backb
         _hideUnlessChanged: true
     datetime:
       label:
-        value: "Enter a date and time"
+        value: "Write a question that requires a date and time response."
+      required:
+        value: false
+        _hideUnlessChanged: true
     time:
       label:
-        value: "Enter a time"
+        value: "Write a question that requires a time response."
+      required:
+        value: false
+        _hideUnlessChanged: true
+    select_one:
+      required:
+        value: false
+        _hideUnlessChanged: true
+    select_multiple:
+      required:
+        value: false
+        _hideUnlessChanged: true
     acknowledge:
       label:
-        value: "Acknowledge"
+        value: "Do you acknowledge that your responses to the survey and any associated photos will be published online at www.mapyourworld.org?"
+      required:
+        value: false
+        _hideUnlessChanged: true
 
   configs.columns = ["type", "name", "label", "hint", "required", "relevant", "default", "constraint"]
 

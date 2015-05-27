@@ -5,7 +5,7 @@
 kobo.controller('BuilderController', ['$scope', '$rootScope', '$routeParams', '$routeTo', '$miscUtils', '$userDetails', '$api', '$q', BuilderController]);
 
 function BuilderController($scope, $rootScope, $routeParams, $routeTo, $miscUtils, $userDetails, $api, $q) {
-    $rootScope.activeTab = 'Forms';
+    $rootScope.activeTab = 'Back to Survey Drafts';
     $scope.routeParams = $routeParams;
     var forceLeaveConfirmation = !$userDetails.debug;
     function handleUnload(event) {

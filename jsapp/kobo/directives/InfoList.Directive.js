@@ -50,7 +50,12 @@ kobo.directive ('infoList', function ($rootScope, $miscUtils, $location) {
                 if(!format) {
                     format = "xml";
                 }
-                return scope.name.toLowerCase() + '/' + item.id + "?format=" + format;
+
+                var forms_path = scope.name.toLowerCase()
+                var endpoint = ( forms_path === '') ? 'forms' : forms_path
+                // 'endpoint' is required to generate the survey draft's download links
+                var link = endpoint + '/' + item.id + "?format=" + format;
+                return link
             };
 
             scope.toggleAddFormDropdown = function () {

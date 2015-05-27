@@ -3,11 +3,13 @@ define 'cs!xlform/view.rowSelector', [
         'cs!xlform/view.pluggedIn.backboneView',
         'cs!xlform/view.templates',
         'cs!xlform/view.icons',
+        'cs!xlform/model.configs',
         ], (
             Backbone,
             $baseView,
             $viewTemplates,
             $icons,
+            $modelConfigs,
             )->
 
   viewRowSelector = {}
@@ -27,6 +29,8 @@ define 'cs!xlform/view.rowSelector', [
     expand: ->
       @$el.parents('.survey-editor__null-top-row--hidden').removeClass('survey-editor__null-top-row--hidden')
       @show_namer()
+      # opens picker once new row is added
+      @show_picker(new Event('show_picker'))
       $namer_form = @$el.find('.row__questiontypes__form')
       $namer_form.on 'submit', _.bind @show_picker, @
       $namer_form.find('button').on 'click', (evt) ->
@@ -112,10 +116,13 @@ define 'cs!xlform/view.rowSelector', [
         type: rowType
 
       if rowType is 'calculate'
-
         rowDetails.calculation = value
       else
-        rowDetails.label = value
+        if rowType is 'select_one' or rowType is 'select_multiple'
+          rowDetails.label = value
+        else
+          rowDetails.label = $modelConfigs.defaultsForType[rowType]['label']
+
 
       options = {}
       if (rowBefore = @options.spawnedFromView?.model)

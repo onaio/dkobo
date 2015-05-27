@@ -66,8 +66,7 @@ define 'cs!xlform/view.row.templates', [], ()->
             <span class="card__buttons__button card__buttons__button--delete red js-delete-row" data-button-name="delete"><i class="fa fa-trash-o"></i></span>
       """
       if surveyView.features.multipleQuestions
-        template += """<span class="card__buttons__button card__buttons__button--copy blue js-clone-question" data-button-name="duplicate"><i class="fa fa-copy"></i></span>
-                  <span class="card__buttons__button card__buttons__button--add gray-green js-add-to-question-library" data-button-name="add-to-library"><i class="fa fa-folder-o"><i class="fa fa-plus"></i></i></span>"""
+        template += """<span class="card__buttons__button card__buttons__button--copy blue js-clone-question" data-button-name="duplicate"><i class="fa fa-copy"></i></span>"""
 
       return template + """
           </div>

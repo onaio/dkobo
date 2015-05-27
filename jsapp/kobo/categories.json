@@ -1,0 +1,79 @@
+[
+    {
+        "id": "category:Animal_Rights", 
+        "name": "Animal Rights",
+        "icon": "animal_rights_icon",
+        "class": "animal",
+        "selected": "false"
+    }, 
+    {
+        "id": "category:Disability", 
+        "name": "Disability",
+        "icon": "disability_icon",
+        "class": "disability",
+        "selected": "false"
+    },
+    {
+        "id": "category:Education", 
+        "name": "Education",
+        "icon": "education_icon",
+        "class": "education",
+        "selected": "false"
+    },
+    {
+        "id": "category:Environment/Sustainability", 
+        "name": "Environment/Sustainability",
+        "icon": "environment_sustainability_icon",
+        "class": "environment",        
+        "selected": "false"
+    },
+    {
+        "id": "category:Food_Justice", 
+        "name": "Food Justice",
+        "icon": "food_justice_icon",
+        "class": "food-justice",
+        "selected": "false"
+    },
+    {
+        "id": "category:Gender", 
+        "name": "Gender",
+        "icon": "gender_icon",
+        "class": "gender",
+        "selected": "false"
+    },
+    {
+        "id": "category:Human_Rights", 
+        "name": "Human Rights",
+        "icon": "human_rights_icon",
+        "class": "human-rights",
+        "selected": "false"
+    },
+    {
+        "id": "category:Health", 
+        "name": "Health",
+        "icon": "health_icon",
+        "class": "health",
+        "selected": "false"
+    },
+    {
+        "id": "category:Poverty", 
+        "name": "Economic Justice",
+        "icon": "poverty_icon",
+        "class": "poverty",
+        "selected": "false"
+    },
+    {
+        "id": "category:Safety/Violence", 
+        "name": "Safety/Violence",
+        "icon": "safety_violence_icon",
+        "class": "safety",
+        "selected": "false"
+    },
+    {
+        "id": "category:Other", 
+        "name": "Other",
+        "icon": "other_icon",
+        "class": "other",        
+        "selected": "false"
+    }
+]

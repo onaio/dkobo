@@ -38,3 +38,7 @@ dkobo.v12.suo
 
 dkobo/static/js/*.html
 npm-debug.log
+
+Vagrantfile
+ansible
+.vagrant

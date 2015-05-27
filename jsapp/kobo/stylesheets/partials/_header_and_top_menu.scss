@@ -4,30 +4,38 @@
 
 .header-bar {
     width: 100%;
-    height: 40px;
-    position: fixed;
     top: 0;
     left: 0;
     z-index: 6;
     line-height: 40px;
-    background-color: #3F3F3F;
     transition: width 150ms, left 150ms;
+    background:#3F3F3F;
     .header-bar__title, .header-bar__support {
-        margin-top: 0;
-        margin-right: 10px;
-        margin-bottom: 0;
-        display: inline-block;
         font-size: 14px;
         font-family: 'Open Sans';
         font-weight: 600;
         .header-bar__title-text { color: white; }
     }
     .header-bar__support {
+      display: none;
       margin-right: 30px;
       color: white;
       &:hover {
         color: #1e8fde;
       }
+    }
+    h1.header-bar__title{
+        margin:0;
+    }
+    span.header-bar__title-text{
+        background: #3F3F3F;;
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding-left: 25px;
+    }
+    .header-bar__title-text:empty{
+        display:none;
     }
 
     .btn {
@@ -46,8 +54,12 @@
         height: 27px;
         margin-top: 5px;
         margin-right: 6px;
+        display: none;
     }
 
+}
+.main>section.content{
+    padding-top:0!important;
 }
 
 
@@ -61,11 +73,17 @@
     border-bottom: 1px solid #E3E8EC;
     padding: 5px 4px;
     position: fixed;
-    top: 40px;
+    bottom: 0px;
     left: 0;
     z-index: 6;
     background-color: #FFF;
     transition: width 150ms, left 150ms;
+    #question-library {
+        display: none;
+    }
+    #group-questions {
+        display: none;
+    }
 }
 
 // in smaller screen sizes, reduce width of buttons to be able to fit

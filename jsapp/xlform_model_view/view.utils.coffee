@@ -128,7 +128,8 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
     enketoServer = "https://enketo.org"
     enketoPreviewUri = "/webform/preview"
     buildUrl = (previewUrl)->
-      """#{enketoServer}#{enketoPreviewUri}?form=#{previewUrl}"""
+      encodedPreviewUrl = encodeURIComponent(previewUrl)
+      """#{enketoServer}#{enketoPreviewUri}?form=#{encodedPreviewUrl}"""
 
     _loadConfigs = (options)->
       if options.enketoPreviewUri
@@ -151,6 +152,37 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
       $(".iframe-bg-shade").remove()
       $(".enketo-holder").remove()
 
+    getCookie = (c_name) ->
+      if document.cookie.length > 0
+        c_start = document.cookie.indexOf(c_name + '=')
+        if c_start != -1
+          c_start = c_start + c_name.length + 1
+          c_end = document.cookie.indexOf(';', c_start)
+          if c_end == -1
+            c_end = document.cookie.length
+          return unescape(document.cookie.substring(c_start, c_end))
+      ''
+
+    urlBase64Decode = (str) ->
+      output = str.replace(/-/g, '+').replace(/_/g, '/')
+      remainder = output.length % 4
+      if remainder == 2
+        output += '=='
+      else if remainder == 3
+        output += '='
+      else if remainder != 0
+        throw 'Illegal base64url string!'
+      decodeURIComponent escape(window.atob(output))
+
+    decodeToken = (token) ->
+      parts = token.split('.')
+      if parts.length != 3
+        throw new Error('JWT must have 3 parts')
+      decoded = urlBase64Decode(parts[1])
+      if !decoded
+        throw new Error('Cannot decode the token')
+      JSON.parse decoded
+
     launch.fromCsv = (surveyCsv, options={})->
       holder = $("<div>", class: "enketo-holder").html("<div class='enketo-iframe-icon'></div><div class=\"enketo-loading-message\"><p><i class=\"fa fa-spin fa-spinner\"></i><br/>Loading Preview</p><p>This will take a few seconds depending on the size of your form.</p></div>")
       wrap = $("<div>", class: "js-click-remove-iframe iframe-bg-shade")
@@ -171,19 +203,30 @@ define 'cs!xlform/view.utils', ['xlform/view.utils.validator'], (Validator)->
       onError = options.onError or (args...)-> console?.error.apply(console, args)
 
       $.ajax
-        url: "#{previewServer}/koboform/survey_preview/"
+        url: "#{previewServer}/api/v1/forms/survey_preview"
         method: "POST"
-        data: data
+        data: "body": surveyCsv
+        beforeSend: (xhr)=>
+          csrftoken = getCookie('csrftoken')
+          ona_user_cookie = getCookie('ona_user')
+          jwt_payload = decodeToken(ona_user_cookie)
+          auth_token = jwt_payload.token
+          xhr.setRequestHeader 'Authorization', 'Token ' + auth_token
+          xhr.setRequestHeader 'X-CSRFToken', csrftoken
         complete: (jqhr, status)=>
           response = jqhr.responseJSON
           if status is "success" and response and response.unique_string
             unique_string = response.unique_string
-            launch("#{previewServer}/koboform/survey_preview/#{unique_string}")
+            username = response.username
+            # NB: 'unique_string' is survey draft file name on ona
+            launch("#{previewServer}/api/v1/forms/survey_preview.xml?filename=#{unique_string}&username=#{username}")
             options.onSuccess()  if options.onSuccess?
           else if status isnt "success"
             wrap.remove()
             holder.remove()
             informative_message = jqhr.responseText or jqhr.statusText
+            escaped_informative_message = JSON.parse(informative_message.replace(/'/g, "\'"))
+            informative_message = escaped_informative_message.detail
             if informative_message.split("\n").length > 0
               informative_message = informative_message.split("\n")[0..2].join("<br>")
             onError informative_message, title: 'Error launching preview'

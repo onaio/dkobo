@@ -6,7 +6,7 @@ kobo.controller('FormsController', ['$scope', '$rootScope', '$resource', '$miscU
 function FormsController ($scope, $rootScope, $resource, $miscUtils, $api) {
     var formsApi = $resource('api/survey_drafts/:id', {id: '@id'});
     $scope.items_loaded = false;
-    $rootScope.add_form = '+ Add Form';
+    $rootScope.add_form = '+ Add Survey';
 
     var load_forms = function () {
         formsApi.query(function (items) {
@@ -37,7 +37,7 @@ function FormsController ($scope, $rootScope, $resource, $miscUtils, $api) {
         '-emptyformlist');
 
     $rootScope.canAddNew = true;
-    $rootScope.activeTab = 'Forms';
+    $rootScope.activeTab = '';
     $rootScope.icon_link = 'forms';
 
     $scope.deleteSurvey = function (survey) {
